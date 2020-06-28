@@ -9,6 +9,6 @@ def dse_hist(startdate, enddate, instrument):
   df.columns = ["DATE", "TRADING.CODE", "LTP", "HIGH", "LOW", "OPENP", "CLOSEP", "YCP", "TRADE", "VALUE", "VOLUME"]
   cols = df.columns.drop(['DATE', 'TRADING.CODE'])
   df[cols] = df[cols].apply(pd.to_numeric, errors='coerce') 
-  df[['LTP', 'HIGH', 'LOW', 'OPENP', 'CLOSEP', 'YCP', 'TRADE', 'VALUE', 'VOLUME']] = df[['LTP', 'HIGH', 'LOW', 'OPENP', 'CLOSEP', 'YCP', 'TRADE', 'VALUE', 'VOLUME']].apply(pd.to_numeric).fillna(0).astype(float)
+  #df[['LTP', 'HIGH', 'LOW', 'OPENP', 'CLOSEP', 'YCP', 'TRADE', 'VALUE', 'VOLUME']] = df[['LTP', 'HIGH', 'LOW', 'OPENP', 'CLOSEP', 'YCP', 'TRADE', 'VALUE', 'VOLUME']].apply(pd.to_numeric).fillna(0).astype(float)
   df[cols] = df[cols].round(2)
   return (df)

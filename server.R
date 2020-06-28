@@ -164,7 +164,7 @@ shinyServer(function(input, output) {
           width = 1000
         ) %>% add_trace(
           y = ~ up,
-          name = 'Middle Band',
+          name = 'Upper Band',
           line = list(dash = "dot")) %>% add_trace(
           y = ~ mavg,
           name = 'Middle Band',
