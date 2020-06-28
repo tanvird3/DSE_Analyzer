@@ -162,17 +162,20 @@ shinyServer(function(input, output) {
           mode = "lines",
           name = "Current Price",
           width = 1000
-        ) %>% add_trace(y = ~ up,
-                        name = 'Middle Band',
-                        line = list(dash = "dot")) %>% add_trace(y = ~ mavg,
-                                                                 name = 'Middle Band',
-                                                                 line = list(dash = "dot")) %>% add_trace(y = ~ dn,
-                                                                                                          name = 'Lower Band',
-                                                                                                          line = list(dash = "dot")) %>% layout(
-                                                                                                            title = paste("[Bollinger Band]", instrument),
-                                                                                                            xaxis = list(title = "Date"),
-                                                                                                            yaxis = list (title = "Price")
-                                                                                                          )
+        ) %>% add_trace(
+          y = ~ up,
+          name = 'Middle Band',
+          line = list(dash = "dot")) %>% add_trace(
+          y = ~ mavg,
+          name = 'Middle Band',
+          line = list(dash = "dot")) %>% add_trace(
+          y = ~ dn,
+          name = 'Lower Band',
+          line = list(dash = "dot")) %>% layout(
+          title = paste("[Bollinger Band]", instrument),
+          xaxis = list(title = "Date"),
+          yaxis = list (title = "Price")
+        )
       
       # MACD
       # data preparation
