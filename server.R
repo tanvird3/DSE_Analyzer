@@ -174,7 +174,7 @@ shinyServer(function(input, output) {
           line = list(dash = "dot")) %>% layout(
           title = paste("[Bollinger Band]", instrument),
           xaxis = list(title = "Date"),
-          yaxis = list (title = "Price")
+          yaxis = list (title = "Price"), margin = list(t = 40)
         )
       
       # MACD
@@ -187,6 +187,7 @@ shinyServer(function(input, output) {
       
       macd <- bind_cols(DATE = df$DATE, macd)
       macd <- macd[34:nrow(macd), ]
+      
       
       # plot making
       macd_plot <-
@@ -212,7 +213,7 @@ shinyServer(function(input, output) {
         ) %>% layout(
           title = paste("[MACD]", instrument),
           xaxis = list(title = "Date"),
-          yaxis = list (title = "Amount")
+          yaxis = list (title = "Amount"), margin = list(t = 40)
         )
       
       
