@@ -4,7 +4,6 @@ shinyServer(function(input, output) {
              startdate,
              enddate,
              indicator) {
-      
       # get the data
       reticulate::source_python("dse.py")
       
@@ -162,20 +161,18 @@ shinyServer(function(input, output) {
           mode = "lines",
           name = "Current Price",
           width = 1000
-        ) %>% add_trace(
-          y = ~ up,
-          name = 'Upper Band',
-          line = list(dash = "dot")) %>% add_trace(
-          y = ~ mavg,
-          name = 'Middle Band',
-          line = list(dash = "dot")) %>% add_trace(
-          y = ~ dn,
-          name = 'Lower Band',
-          line = list(dash = "dot")) %>% layout(
-          title = paste("[Bollinger Band]", instrument),
-          xaxis = list(title = "Date"),
-          yaxis = list (title = "Price"), margin = list(t = 40)
-        )
+        ) %>% add_trace(y = ~ up,
+                        name = 'Upper Band',
+                        line = list(dash = "dot")) %>% add_trace(y = ~ mavg,
+                                                                 name = 'Middle Band',
+                                                                 line = list(dash = "dot")) %>% add_trace(y = ~ dn,
+                                                                                                          name = 'Lower Band',
+                                                                                                          line = list(dash = "dot")) %>% layout(
+                                                                                                            title = paste("[Bollinger Band]", instrument),
+                                                                                                            xaxis = list(title = "Date"),
+                                                                                                            yaxis = list (title = "Price"),
+                                                                                                            margin = list(t = 40)
+                                                                                                          )
       
       # MACD
       # data preparation
@@ -213,9 +210,39 @@ shinyServer(function(input, output) {
         ) %>% layout(
           title = paste("[MACD]", instrument),
           xaxis = list(title = "Date"),
-          yaxis = list (title = "Amount"), margin = list(t = 40)
+          yaxis = list (title = "Amount"),
+          margin = list(t = 40)
         )
       
+      # RSI
+      # data preparation
+      rsi_cal <- data.frame(RSI(df[, "CLOSEP"]), maType = "EMA")
+      rsi_dt <- bind_cols(DATE = df$DATE, rsi = rsi_cal[, 1])
+      
+      # plot making
+      rsi_plot <-
+        plot_ly(
+          rsi_dt,
+          x = ~ DATE,
+          y = ~ rsi,
+          type = "scatter",
+          mode = "lines",
+          name = "RSI",
+          width = 1000
+        ) %>% add_trace(
+          y = ~ rep(70, nrow(rsi_dt)),
+          name = 'Top Signal',
+          line = list(dash = "dot")
+        ) %>% add_trace(
+          y = ~ rep(30, nrow(rsi_dt)),
+          name = 'Bottom Signal',
+          line = list(dash = "dot")
+        ) %>% layout(
+          title = paste("[RSI]", instrument),
+          xaxis = list(title = "Date"),
+          yaxis = list (title = "RSI"),
+          margin = list(t = 40)
+        )
       
       # shape the data (date and closing price) for VaR and CVaR
       df <- df[, c(1, 7)]
@@ -294,6 +321,7 @@ shinyServer(function(input, output) {
           candleplot = candleplot,
           bbands_plot = bbands_plot,
           macd_plot = macd_plot,
+          rsi_plot = rsi_plot,
           vcvar = vcvar
         )
       )
@@ -328,10 +356,19 @@ shinyServer(function(input, output) {
                 input$indicator)$macd_plot
     })
   
+  output$output_rsi <-
+    renderPlotly({
+      analytics(input$instrument,
+                input$startdate,
+                input$enddate,
+                input$indicator)$rsi_plot
+    })
+  
   lapply(c(
     "output_candleplot",
     "output_bbands",
     "output_macd",
+    "output_rsi",
     "output_vcvar"
   ), function(x)
     outputOptions(output, x, suspendWhenHidden = F))

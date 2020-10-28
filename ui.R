@@ -30,7 +30,9 @@ shinyUI(fluidPage (
                  "Technical Indicators",
                  plotlyOutput("output_bbands"),
                  br(),
-                 plotlyOutput("output_macd")
+                 plotlyOutput("output_macd"),
+                 br(),
+                 plotlyOutput("output_rsi")
                ),
                tabPanel("VaR & CVaR",
                         #tableOutput("output_beta"),
