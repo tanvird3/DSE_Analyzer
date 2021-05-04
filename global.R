@@ -1,13 +1,13 @@
-library(openxlsx)
+#library(openxlsx)
 library(TTR)
-library(stringr)
+#library(stringr)
 library(plotly)
-library(quantmod)
+#library(quantmod)
 library(PerformanceAnalytics)
 library(shinythemes)
 library(shinyjs)
-library(data.table)
-library(plyr)
+#library(data.table)
+#library(plyr)
 library(dplyr)
 
 options(digits = 5)
@@ -20,7 +20,8 @@ reticulate::virtualenv_install("python35_env",
 reticulate::use_virtualenv("python35_env", required = TRUE)
 
 # read instrument names
-inst_name <- fread("Inst.csv")
+#inst_name <- fread("Inst.csv")
+inst_name <- readr::read_csv("Inst.csv")
 inst_name <- inst_name$TRADING.CODE
 t_default <- which(inst_name == "ACI")
 
