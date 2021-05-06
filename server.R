@@ -2,8 +2,7 @@ shinyServer(function(input, output) {
   analytics <-
     function(instrument,
              startdate,
-             enddate,
-             indicator) {
+             enddate) {
       # get the data
       reticulate::source_python("dse.py")
       
@@ -330,38 +329,33 @@ shinyServer(function(input, output) {
   output$output_candleplot <- renderPlotly({
     analytics(input$instrument,
               input$startdate,
-              input$enddate,
-              input$indicator)$candleplot
+              input$enddate)$candleplot
   })
   output$output_vcvar <- renderPlotly({
     analytics(input$instrument,
               input$startdate,
-              input$enddate,
-              input$indicator)$vcvar
+              input$enddate)$vcvar
   })
   
   output$output_bbands <-
     renderPlotly({
       analytics(input$instrument,
                 input$startdate,
-                input$enddate,
-                input$indicator)$bbands_plot
+                input$enddate)$bbands_plot
     })
   
   output$output_macd <-
     renderPlotly({
       analytics(input$instrument,
                 input$startdate,
-                input$enddate,
-                input$indicator)$macd_plot
+                input$enddate)$macd_plot
     })
   
   output$output_rsi <-
     renderPlotly({
       analytics(input$instrument,
                 input$startdate,
-                input$enddate,
-                input$indicator)$rsi_plot
+                input$enddate)$rsi_plot
     })
   
   lapply(c(
