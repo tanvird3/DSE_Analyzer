@@ -16,10 +16,10 @@ shinyServer(function(input, output) {
       
       # filter out where HIGH, LOW or OPEN values are zero for the stock
       df <-
-        filter(df,!(HIGH == 0 |
-                      LOW == 0 |
-                      OPENP == 0 |
-                      CLOSEP == 0))  %>% distinct(DATE, .keep_all = T)
+        filter(df, !(HIGH == 0 |
+                       LOW == 0 |
+                       OPENP == 0 |
+                       CLOSEP == 0))  %>% distinct(DATE, .keep_all = T)
       
       # candlestick plot generation
       # Color or VOLUME bars
@@ -182,7 +182,7 @@ shinyServer(function(input, output) {
         mutate(macd, Color = ifelse(Hist >= 0, "#009E73", "#CC79A7"))
       
       macd <- bind_cols(DATE = df$DATE, macd)
-      macd <- macd[34:nrow(macd), ]
+      macd <- macd[34:nrow(macd),]
       
       
       # plot making
@@ -245,7 +245,7 @@ shinyServer(function(input, output) {
       
       # shape the data (date and closing price) for VaR and CVaR
       df <- df[, c(1, 7)]
-      R_series <- xts(df[,-1], order.by = df$DATE)
+      R_series <- xts(df[, -1], order.by = df$DATE)
       R_series <- Return.calculate(R_series)
       R_series[is.na(R_series)] <- 0
       R_series[!is.finite(R_series)] <- 0
@@ -326,37 +326,67 @@ shinyServer(function(input, output) {
       )
     }
   
-  output$output_candleplot <- renderPlotly({
-    analytics(input$instrument,
-              input$startdate,
-              input$enddate)$candleplot
-  })
+  #get the output
+  output_get <-
+    reactive({
+      analytics(input$instrument, input$startdate, input$enddate)
+    })
+  
+  output$output_candleplot <-
+    renderPlotly({
+      output_get()$candleplot
+    })
+  
   output$output_vcvar <- renderPlotly({
-    analytics(input$instrument,
-              input$startdate,
-              input$enddate)$vcvar
+    output_get()$vcvar
   })
   
   output$output_bbands <-
     renderPlotly({
-      analytics(input$instrument,
-                input$startdate,
-                input$enddate)$bbands_plot
+      output_get()$bbands_plot
     })
   
   output$output_macd <-
     renderPlotly({
-      analytics(input$instrument,
-                input$startdate,
-                input$enddate)$macd_plot
+      output_get()$macd_plot
     })
   
   output$output_rsi <-
     renderPlotly({
-      analytics(input$instrument,
-                input$startdate,
-                input$enddate)$rsi_plot
+      output_get()$rsi_plot
     })
+  
+  # output$output_candleplot <- renderPlotly({
+  #   analytics(input$instrument,
+  #             input$startdate,
+  #             input$enddate)$candleplot
+  # })
+  # output$output_vcvar <- renderPlotly({
+  #   analytics(input$instrument,
+  #             input$startdate,
+  #             input$enddate)$vcvar
+  # })
+  #
+  # output$output_bbands <-
+  #   renderPlotly({
+  #     analytics(input$instrument,
+  #               input$startdate,
+  #               input$enddate)$bbands_plot
+  #   })
+  #
+  # output$output_macd <-
+  #   renderPlotly({
+  #     analytics(input$instrument,
+  #               input$startdate,
+  #               input$enddate)$macd_plot
+  #   })
+  #
+  # output$output_rsi <-
+  #   renderPlotly({
+  #     analytics(input$instrument,
+  #               input$startdate,
+  #               input$enddate)$rsi_plot
+  #   })
   
   lapply(c(
     "output_candleplot",
