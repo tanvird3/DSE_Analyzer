@@ -15,7 +15,7 @@ options(digits = 5)
 # load the virtual env
 reticulate::virtualenv_create("python35_env", python = "python3")
 reticulate::virtualenv_install("python35_env",
-                               packages = c("bdshare"),
+                               packages = c("bdshare==0.2.0"),
                                ignore_installed = T)
 reticulate::use_virtualenv("python35_env", required = TRUE)
 
